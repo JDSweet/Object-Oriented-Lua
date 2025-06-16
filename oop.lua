@@ -1,7 +1,4 @@
 oop = {
-  init = function()
-    oop.classify(oop.object)
-  end,
   classify = function(class)
     if class.new == nil then
       class.new = oop.new
@@ -12,7 +9,11 @@ oop = {
     if class.implement == nil then
       class.implement = oop.implement
     end
-    oop.extend(class, oop.object)
+    for k,v in pairs(oop.object) do
+      if class[k] == nil then
+        class[k] = v
+      end
+    end
   end,
   new = function(class, ...)
     local instance = {}
@@ -37,7 +38,7 @@ oop = {
     end
     table.insert(interface.inheritors, class)
     for k, v in pairs(interface) do
-      if type(v) == 'function' then
+      if type(v) == 'function' and class[k] == nil then
         class[k] = v
       end
     end
@@ -83,11 +84,8 @@ oop = {
     return false
   end,
   object = {
-    ctor = function(self)
-    end,
     tostring = function(self)
       return tostring(self)
     end
   }
 }
-oop.init()
